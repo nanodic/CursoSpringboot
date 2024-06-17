@@ -2,6 +2,8 @@ package clases;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +21,9 @@ public class Products {
     private Integer stock;
     @Column
     private Double price;
+
+    @OneToMany(mappedBy = "product")
+    private List<InvoiceDetails> invoiceDetails = new ArrayList<>();
 
     public Products(String description, String code, Integer stock, Double price) {
         this.description = description;

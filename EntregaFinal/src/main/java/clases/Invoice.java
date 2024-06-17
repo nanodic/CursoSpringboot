@@ -3,7 +3,9 @@ package clases;
 import jakarta.persistence.*;
 import org.hibernate.dialect.function.TruncFunction;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -19,6 +21,14 @@ public class Invoice {
     private Date created_at;
     @Column
     private Double total;
+
+    @ManyToOne()
+    @JoinColumn(name = "client_id")
+    private Clients client;
+
+    @OneToMany(mappedBy = "invoice")
+    private List<InvoiceDetails> invoiceDetails = new ArrayList<>();
+
 
     public Invoice(Integer clientId, Date created_at, Double total) {
         this.clientId = clientId;

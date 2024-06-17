@@ -20,6 +20,16 @@ public class InvoiceDetails {
     @Column
     private Double price;
 
+
+    @ManyToOne()
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
+
+    @ManyToOne()
+    @JoinColumn(name = "product_id")
+    private Products product;
+
+
     public InvoiceDetails(Integer invoice_id, Integer amount, Integer product_id, Double price) {
         this.invoice_id = invoice_id;
         this.amount = amount;

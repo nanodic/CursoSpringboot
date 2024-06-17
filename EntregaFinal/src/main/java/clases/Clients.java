@@ -2,6 +2,8 @@ package clases;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //TAG de entidad
@@ -20,6 +22,9 @@ public class Clients {
     private String lastName;
     @Column
     private Integer document;
+
+    @OneToMany(mappedBy = "client")
+    private List<Invoice> invoices = new ArrayList<>();
 
 
     //Constructor

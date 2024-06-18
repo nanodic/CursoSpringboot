@@ -1,13 +1,11 @@
 package gestores;
 
-import clases.Invoice;
 import clases.Products;
 import jakarta.persistence.EntityManager;
 
-import java.util.Date;
 import java.util.List;
 
-public class GestorProducto {
+public class GestorProducts {
 
     public void create(String description, String code, Integer stock, Double price) {
         EntityManager entityManager = GestorGenerico.getEntityManager();

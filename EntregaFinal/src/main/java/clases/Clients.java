@@ -27,6 +27,9 @@ public class Clients {
     private List<Invoice> invoices = new ArrayList<>();
 
 
+    public Clients() {
+    }
+
     //Constructor
     public Clients(String name, String lastName, Integer document) {
         this.name = name;

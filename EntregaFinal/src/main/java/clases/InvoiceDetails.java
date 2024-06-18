@@ -11,11 +11,11 @@ public class InvoiceDetails {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer invoce_detail_id;
 
-    @Column
+    @Column(insertable = false, updatable = false)
     private Integer invoice_id;
     @Column
     private Integer amount;
-    @Column
+    @Column(insertable=false, updatable=false)
     private Integer product_id;
     @Column
     private Double price;

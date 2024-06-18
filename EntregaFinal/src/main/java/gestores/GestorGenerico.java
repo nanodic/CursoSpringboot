@@ -7,7 +7,7 @@ public class GestorGenerico {
     private static final EntityManagerFactory entityManagerFactory;
 
     static {
-        entityManagerFactory = Persistence.createEntityManagerFactory("tpIntegrador");
+        entityManagerFactory = Persistence.createEntityManagerFactory("tpintegrador");
     }
     public static EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();

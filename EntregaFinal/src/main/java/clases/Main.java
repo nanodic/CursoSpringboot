@@ -14,7 +14,7 @@ public class Main {
 
         try{
             GestorClients clients = new GestorClients();
-            clients.create("Nahuel", "Di Cioocco",35013234);
+            clients.create("Nahuel", "Di Ciocco",35013234);
             clients.create("Daniel","Perez",14013345);
             clients.create("Silvia", "Guzman", 17104234);
             GestorProducts products = new GestorProducts();

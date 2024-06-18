@@ -22,8 +22,8 @@ public class Products {
     @Column
     private Double price;
 
-    @OneToMany(mappedBy = "product")
-    private List<InvoiceDetails> invoiceDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvoiceDetails> invoiceDetails;
 
     public Products(String description, String code, Integer stock, Double price) {
         this.description = description;

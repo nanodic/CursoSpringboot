@@ -26,8 +26,8 @@ public class Invoice {
     @JoinColumn(name = "client_id")
     private Clients client;
 
-    @OneToMany(mappedBy = "invoice")
-    private List<InvoiceDetails> invoiceDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "invoice",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvoiceDetails> invoiceDetails;
 
 
     public Invoice(Integer clientId, Date created_at, Double total) {

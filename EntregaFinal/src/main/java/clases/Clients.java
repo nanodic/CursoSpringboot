@@ -23,8 +23,8 @@ public class Clients {
     @Column
     private Integer document;
 
-    @OneToMany(mappedBy = "client")
-    private List<Invoice> invoices = new ArrayList<>();
+    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Invoice> invoices;
 
 
     public Clients() {

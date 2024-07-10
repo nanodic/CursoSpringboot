@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Objects;
 
 //TAG de entidad
 @Entity
@@ -25,5 +24,10 @@ public class Clients {
     @Column
     @Setter @Getter private Integer document;
 
+    @OneToMany(mappedBy = "client_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvoiceDetails> carts;
+
+    @OneToMany(mappedBy = "client_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Invoice> invoice;
 
 }

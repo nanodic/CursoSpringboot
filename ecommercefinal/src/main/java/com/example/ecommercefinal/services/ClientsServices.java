@@ -13,12 +13,12 @@ public class ClientsServices {
     @Autowired
     private ClientsRepository repository;
 
-    public void saveClient(Clients clients)
+    public Clients saveClient(Clients clients)
     {
-        repository.save(clients);
+        return repository.save(clients);
     }
 
-    public List<Clients> readClient()
+    public List<Clients> readAll()
     {
         return repository.findAll();
     }

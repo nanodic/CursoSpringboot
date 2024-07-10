@@ -3,59 +3,98 @@ package com.example.ecommercefinal.controllers;
 import com.example.ecommercefinal.entities.Clients;
 import com.example.ecommercefinal.services.ClientsServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="api/v1/clients")
+@RequestMapping(path="api/v1/auth/register")
 public class ClientsController {
 
     @Autowired
-    private ClientsServices service;
+    private ClientsServices clientsServices;
 
     @PostMapping()
-    public void saveClient(@RequestBody Clients clients) {
+    public ResponseEntity<Clients> saveClient(@RequestBody Clients data) {
         try {
-            service.saveClient(clients);
+            Clients clients = clientsServices.saveClient(data);
+            return new ResponseEntity<>(clients, HttpStatus.CREATED);
         } catch (Exception e)
         {
             System.out.println("Error de registro");
-            throw new RuntimeException( "ERROR AL REGISTRAR CLIENTE");
-        }
-    }
-
-    @GetMapping()
-    public List<Clients> readClient() {
-        try {
-           return service.readClient();
-
-        } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR CLIENTES");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/{id}")
-    public Optional<Clients> readOne(@PathVariable("id") Integer  id) {
+    public ResponseEntity<Clients> readClients(@PathVariable Integer id) {
         try {
-            return service.readOne(id);
-
+            Optional<Clients> clients = clientsServices.readOne(id);
+            if (clients.isPresent()) {
+                return ResponseEntity.ok(clients.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR CLIENTE");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void destroyOneClients(@PathVariable("id") Integer  id) {
+    @GetMapping
+    public ResponseEntity<List<Clients>> readAll() {
         try {
-             service.destroyOneClients(id);
-
+            List<Clients> users = clientsServices.readAll();
+            if (!users.isEmpty()) {
+                return ResponseEntity.ok(users);
+            } else {
+                return ResponseEntity.noContent().build();
+            }
         } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR CLIENTE");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @PatchMapping("/api/v1/auth/me/{id}")
+    public ResponseEntity<Clients> updateUser(@PathVariable Integer id, @RequestBody Clients data) {
+        try {
+            Optional<Clients> Clients = clientsServices.readOne(id);
+            if (Clients.isPresent()) {
+                Clients clients = Clients.get();
+                clients.setName(data.getName());
+                clients.setLastName(data.getLastName());
+                clients.setDocument(data.getDocument());
+                return ResponseEntity.ok(clientsServices.saveClient(clients));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Clients> delete(@PathVariable Integer id) {
+        try {
+            Optional<Clients> optionalClients = clientsServices.readOne(id);
+            if (optionalClients.isPresent()) {
+                clientsServices.destroyOneClients(id);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

@@ -3,6 +3,8 @@ package com.example.ecommercefinal.controllers;
 import com.example.ecommercefinal.entities.Products;
 import com.example.ecommercefinal.services.ProductsServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,46 +18,80 @@ public class ProductsController {
     private ProductsServices productsServices;
 
     @PostMapping()
-    public void saveProducts(@RequestBody Products products) {
+    public ResponseEntity<Products>  saveProducts(@RequestBody Products data) {
         try {
-            productsServices.saveProducts(products);
+            Products products = productsServices.saveProducts(data);
+            return new ResponseEntity<>(products, HttpStatus.CREATED);
         } catch (Exception e)
         {
             System.out.println("Error de registro");
-            throw new RuntimeException( "ERROR AL REGISTRAR PRODUCTO");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping()
-    public List<Products> readProducts() {
+    public ResponseEntity<List<Products>> readProducts() {
         try {
-            return productsServices.readProducts();
-
+            List<Products> products = productsServices.readProducts();
+            if (!products.isEmpty()) {
+                return ResponseEntity.ok(products);
+            } else {
+                return ResponseEntity.noContent().build();
+            }
         } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR PRODUCTOS");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/{id}")
-    public Optional<Products> readOne(@PathVariable("id") Integer  id) {
+    public ResponseEntity<Products> readOne(@PathVariable("id") Integer  id) {
         try {
-            return productsServices.readOne(id);
-
+            Optional<Products> products = productsServices.readOne(id);
+            if (products.isPresent()) {
+                return ResponseEntity.ok(products.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR CLIENTE");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public void destroyOneProduct(@PathVariable("id") Integer  id) {
+    public ResponseEntity<Products> deleteProducts(@PathVariable("id") Integer  id) {
         try {
-            productsServices.destroyOneProduct(id);
-
+            Optional<Products> products = productsServices.readOne(id);
+            if (products.isPresent()) {
+                productsServices.delete(id);
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
-            System.out.println("Error de registro");
-            throw new RuntimeException("ERROR AL BUSCAR CLIENTE");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Products> UpdateProducts(@PathVariable Integer id, @RequestBody Products data) {
+        try {
+            Optional<Products> Products = productsServices.readOne(id);
+            if (Products.isPresent()) {
+                Products products = Products.get();
+                products.setCode(data.getCode());
+                products.setStock(data.getStock());
+                products.setPrice(data.getPrice());
+                products.setDescription(data.getDescription());
+                return ResponseEntity.ok(productsServices.saveProducts(products));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

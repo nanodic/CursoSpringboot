@@ -1,6 +1,5 @@
 package com.example.ecommercefinal.services;
 
-import com.example.ecommercefinal.entities.Clients;
 import com.example.ecommercefinal.entities.Products;
 import com.example.ecommercefinal.repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,9 @@ public class ProductsServices {
     @Autowired
     private ProductsRepository repository;
 
-    public void saveProducts(Products products)
+    public Products saveProducts(Products products)
     {
-        repository.save(products);
+       return repository.save(products);
     }
 
     public List<Products> readProducts()
@@ -29,7 +28,7 @@ public class ProductsServices {
         return repository.findById(id);
     }
 
-    public void destroyOneProduct(Integer id)
+    public void delete(Integer id)
     {
         repository.deleteById(id);
     }

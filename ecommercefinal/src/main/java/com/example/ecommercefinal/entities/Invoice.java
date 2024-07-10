@@ -22,13 +22,19 @@ public class Invoice {
     @Column
     @Setter
     @Getter
-    private Integer clientId;
-    @Column
-    @Setter
-    @Getter
     private Date created_at;
     @Column
     @Setter
     @Getter
     private Double total;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Products product_id;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Clients client_id;
+
+
 }

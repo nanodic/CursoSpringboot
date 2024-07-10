@@ -3,8 +3,6 @@ package com.example.ecommercefinal.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name="invoicesDetails")
 @NoArgsConstructor
@@ -24,4 +22,7 @@ public class InvoiceDetails {
     @Column
     @Setter @Getter private Double price;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Clients client_id;
 }
